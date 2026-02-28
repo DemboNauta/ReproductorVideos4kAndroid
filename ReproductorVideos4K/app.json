@@ -1,0 +1,52 @@
+{
+    "expo": {
+        "name": "Ziro 4K",
+        "slug": "ReproductorVideos4K",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/icon.png",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./assets/splash-icon.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "ios": {
+            "supportsTablet": true
+        },
+        "android": {
+            "adaptiveIcon": {
+                "backgroundColor": "#E6F4FE",
+                "foregroundImage": "./assets/android-icon-foreground.png",
+                "backgroundImage": "./assets/android-icon-background.png",
+                "monochromeImage": "./assets/android-icon-monochrome.png"
+            },
+            "package": "com.edgar_kng.ziro4k",
+            "intentFilters": [
+                {
+                    "action": "VIEW",
+                    "data": [
+                        {
+                            "mimeType": "video/*"
+                        }
+                    ],
+                    "category": [
+                        "DEFAULT",
+                        "BROWSABLE"
+                    ]
+                }
+            ]
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "plugins": [
+            "expo-video"
+        ],
+        "extra": {
+            "eas": {
+                "projectId": "0f297f46-4539-4539-9ad9-081f2a5035d0"
+            }
+        }
+    }
+}
