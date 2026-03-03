@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Platform, StatusBar, Animated, useWindowDimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Platform, StatusBar, Animated, useWindowDimensions, BackHandler } from 'react-native';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -125,30 +125,48 @@ export default function CustomVideoPlayer({ videoUri, onClose }) {
         }
     };
 
-    return (
-        <View
-            style={styles.videoContainer}
-            onStartShouldSetResponderCapture={handleStartShouldSetResponderCapture}
-            onResponderRelease={handleResponderRelease}
-        >
-            <VideoView
-                style={styles.video}
-                player={player}
-                allowsFullscreen
-                allowsPictureInPicture
-            />
+    useEffect(() => {
+        const backAction = () => {
+            if (onClose) {
+                onClose();
+            }
+            return true;
+        };
 
-            {/* Animaciones de 10s */}
-            <View style={styles.animationsOverlay} pointerEvents="none">
-                <View style={styles.touchSideLeft}>
-                    <Animated.View style={[styles.skipIndicator, { opacity: fadeAnimLeft }]}>
-                        <Text style={styles.skipText}>⏪ 10s</Text>
-                    </Animated.View>
-                </View>
-                <View style={styles.touchSideRight}>
-                    <Animated.View style={[styles.skipIndicator, { opacity: fadeAnimRight }]}>
-                        <Text style={styles.skipText}>10s ⏩</Text>
-                    </Animated.View>
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction,
+        );
+
+        return () => backHandler.remove();
+    }, [onClose]);
+
+    return (
+        <View style={styles.mainContainer}>
+            <View
+                style={styles.videoContainer}
+                onStartShouldSetResponderCapture={handleStartShouldSetResponderCapture}
+                onResponderRelease={handleResponderRelease}
+            >
+                <VideoView
+                    style={styles.video}
+                    player={player}
+                    allowsFullscreen
+                    allowsPictureInPicture
+                />
+
+                {/* Animaciones de 10s */}
+                <View style={styles.animationsOverlay} pointerEvents="none">
+                    <View style={styles.touchSideLeft}>
+                        <Animated.View style={[styles.skipIndicator, { opacity: fadeAnimLeft }]}>
+                            <Text style={styles.skipText}>⏪ 10s</Text>
+                        </Animated.View>
+                    </View>
+                    <View style={styles.touchSideRight}>
+                        <Animated.View style={[styles.skipIndicator, { opacity: fadeAnimRight }]}>
+                            <Text style={styles.skipText}>10s ⏩</Text>
+                        </Animated.View>
+                    </View>
                 </View>
             </View>
 
@@ -164,10 +182,14 @@ export default function CustomVideoPlayer({ videoUri, onClose }) {
 }
 
 const styles = StyleSheet.create({
-    videoContainer: {
+    mainContainer: {
         flex: 1,
         width: '100%',
         backgroundColor: '#000',
+    },
+    videoContainer: {
+        flex: 1,
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
     },
